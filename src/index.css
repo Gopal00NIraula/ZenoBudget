@@ -2040,3 +2040,100 @@ textarea {
     width: 100%;
   }
 }
+
+@media (max-width: 390px) {
+  #root {
+    padding: 7px 7px calc(92px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-topbar {
+    padding: 8px 9px;
+    border-radius: 13px;
+    gap: 8px;
+  }
+
+  .mobile-topbar-title-wrap .chip {
+    font-size: 0.68rem;
+    padding: 4px 7px;
+  }
+
+  .mobile-topbar-title-wrap h1 {
+    font-size: 1rem;
+  }
+
+  .mobile-topbar .ghost-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mobile-tabbar {
+    left: 5px;
+    right: 5px;
+    bottom: calc(5px + env(safe-area-inset-bottom));
+    padding: 4px;
+    border-radius: 14px;
+    gap: 2px;
+  }
+
+  .mobile-tab-btn {
+    padding: 7px 2px;
+    border-radius: 10px;
+    font-size: 0.58rem;
+  }
+
+  .mobile-tab-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .mobile-tab-label {
+    letter-spacing: 0;
+  }
+
+  .app-shell,
+  .dashboard-grid {
+    gap: 8px;
+  }
+
+  .card,
+  .auth-card,
+  .page-hero {
+    padding: 11px;
+    border-radius: 12px;
+  }
+
+  .page-hero h1,
+  .card-heading h2,
+  .income-form-header h2,
+  .cc-section-header h2,
+  .advanced-flow-card h3 {
+    font-size: 1rem;
+  }
+
+  label {
+    gap: 5px;
+    font-size: 0.84rem;
+  }
+
+  input,
+  select,
+  textarea,
+  .primary-btn,
+  .secondary-btn {
+    min-height: 42px;
+  }
+
+  .income-entry-row,
+  .data-row,
+  .overview-list-item,
+  .overview-timeline-item,
+  .hub-table th,
+  .hub-table td {
+    padding: 8px;
+  }
+
+  .chart-wrap,
+  .overview-mini-chart {
+    min-height: 200px;
+  }
+}
