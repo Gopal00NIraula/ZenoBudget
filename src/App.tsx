@@ -136,6 +136,11 @@ function resolveTabFromPath(pathname: string): Tab | null {
   return null
 }
 
+function isLoginPath(pathname: string): boolean {
+  const normalizedPath = pathname.trim().toLowerCase().replace(/\/+$/, '') || '/'
+  return normalizedPath === '/login'
+}
+
 type HubDayMode = 'working' | 'off'
 
 type HubCommissionRow = {
@@ -713,6 +718,10 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (isLoginPath(location.pathname)) {
+      return
+    }
+
     const routeTab = resolveTabFromPath(location.pathname)
 
     if (routeTab) {
@@ -720,15 +729,20 @@ function App() {
       return
     }
 
-    navigate(tabToPath.overview, { replace: true })
-  }, [location.pathname, navigate])
+    if (user) {
+      navigate(tabToPath.overview, { replace: true })
+      return
+    }
+
+    navigate('/login', { replace: true })
+  }, [location.pathname, navigate, user])
 
   useEffect(() => {
     if (!isFirebaseConfigured || authLoading) {
       return
     }
 
-    const isAuthRoute = location.pathname === '/login'
+    const isAuthRoute = isLoginPath(location.pathname)
 
     if (!user && !isAuthRoute) {
       navigate('/login', { replace: true })
