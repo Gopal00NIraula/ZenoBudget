@@ -1692,3 +1692,258 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Mobile App Mode ── */
+@media (max-width: 768px) {
+  html,
+  body {
+    min-height: 100%;
+    overscroll-behavior-y: contain;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at 15% 6%, rgba(15, 118, 110, 0.16), transparent 34%),
+      radial-gradient(circle at 88% 0%, rgba(234, 88, 12, 0.14), transparent 40%),
+      linear-gradient(180deg, #fffaf3 0%, #fef9ef 55%, #f5efe4 100%);
+  }
+
+  #root {
+    max-width: none;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .app-shell {
+    gap: 10px;
+    padding-bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+
+  .navbar {
+    position: fixed;
+    top: auto;
+    left: 8px;
+    right: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    height: auto;
+    border-radius: 18px;
+    padding: 6px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 6px;
+    border-color: rgba(216, 196, 176, 0.85);
+    box-shadow: 0 16px 30px rgba(51, 65, 85, 0.2);
+  }
+
+  .navbar-brand {
+    display: none;
+  }
+
+  .navbar-nav {
+    order: 1;
+    width: 100%;
+    gap: 4px;
+    justify-content: space-between;
+  }
+
+  .navbar-nav button {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 5px;
+    font-size: 0.67rem;
+    font-weight: 700;
+    flex-direction: column;
+    gap: 3px;
+    border-radius: 10px;
+    line-height: 1.05;
+  }
+
+  .navbar-nav button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .navbar-user {
+    order: 2;
+    margin-left: 0;
+  }
+
+  .navbar-user .user-chip {
+    display: none;
+  }
+
+  .navbar-user .ghost-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .dashboard-grid {
+    gap: 10px;
+  }
+
+  .card,
+  .auth-card,
+  .page-hero {
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .page-hero h1 {
+    font-size: 1.2rem;
+  }
+
+  .split-row {
+    gap: 8px;
+  }
+
+  .split-row .primary-btn,
+  .split-row .secondary-btn,
+  .split-row .ghost-btn,
+  .stack-form .primary-btn,
+  .stack-form .secondary-btn {
+    width: 100%;
+  }
+
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    border-radius: 11px;
+    font-size: 16px;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    min-height: 44px;
+    border-radius: 12px;
+    font-weight: 700;
+  }
+
+  .ghost-btn {
+    min-height: 40px;
+    min-width: 40px;
+    border-radius: 10px;
+  }
+
+  .row-actions {
+    gap: 8px;
+  }
+
+  .calendar-grid {
+    gap: 6px;
+  }
+
+  .day-cell {
+    min-height: 52px;
+    border-radius: 10px;
+    padding: 6px;
+  }
+
+  .hub-calendar-popover {
+    width: min(360px, calc(100vw - 28px));
+  }
+
+  .hub-table-wrap,
+  .income-records,
+  .category-list,
+  .overview-list-grid,
+  .overview-timeline {
+    gap: 8px;
+  }
+
+  .hub-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  .ledger-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .income-entry-row,
+  .data-row,
+  .overview-list-item,
+  .overview-timeline-item {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .income-entry-row {
+    align-items: flex-start;
+  }
+
+  .income-entry-amount {
+    font-size: 0.9rem;
+  }
+
+  .chart-wrap,
+  .overview-mini-chart {
+    min-height: 220px;
+  }
+
+  .cc-section-header {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .cc-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cc-summary-bar,
+  .overview-budget-topline,
+  .overview-metric-grid,
+  .hub-review-grid,
+  .advanced-budget-grid,
+  .date-flow-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  #root {
+    padding: 8px;
+  }
+
+  .app-shell {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+
+  .navbar {
+    left: 6px;
+    right: 6px;
+    bottom: calc(6px + env(safe-area-inset-bottom));
+    padding: 5px;
+    border-radius: 16px;
+  }
+
+  .navbar-nav button {
+    font-size: 0.62rem;
+    padding: 8px 3px;
+  }
+
+  .navbar-nav button svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .card,
+  .auth-card,
+  .page-hero {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .stat-pill {
+    min-width: 0;
+    width: 100%;
+  }
+}
