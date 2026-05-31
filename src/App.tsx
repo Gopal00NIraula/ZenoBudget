@@ -1892,6 +1892,25 @@ function App() {
     payUploadsStore.error,
   ].filter(Boolean)
 
+  const activeTabTitle = useMemo(() => {
+    switch (activeTab) {
+      case 'overview':
+        return 'Overview'
+      case 'routine':
+        return 'Routine'
+      case 'datahub':
+        return 'Data Hub'
+      case 'income':
+        return 'Income Ledger'
+      case 'budgeting':
+        return 'Budgeting'
+      case 'settings':
+        return 'Settings'
+      default:
+        return 'ZenoBudget'
+    }
+  }, [activeTab])
+
   if (!isFirebaseConfigured) {
     return (
       <div className="auth-wrap">
@@ -2049,7 +2068,7 @@ function App() {
 
   return (
     <div className="app-shell">
-      <header className="navbar">
+      <header className="navbar desktop-navbar">
         <div className="navbar-brand">
           <PiggyBank size={20} />
           <span>ZenoBudget</span>
@@ -2087,6 +2106,22 @@ function App() {
           </span>
           <button type="button" className="ghost-btn" title="Sign out" onClick={() => void signOutCurrentUser()}>
             <LogOut size={14} />
+          </button>
+        </div>
+      </header>
+
+      <header className="mobile-topbar">
+        <div className="mobile-topbar-title-wrap">
+          <p className="chip">ZenoBudget</p>
+          <h1>{activeTabTitle}</h1>
+        </div>
+        <div className="mobile-topbar-actions">
+          <span className="mobile-profile-chip" title={profileStore.profile?.displayName || user.email || ''}>
+            <UserRound size={14} />
+            {(profileStore.profile?.displayName || user.email || 'Account').slice(0, 14)}
+          </span>
+          <button type="button" className="ghost-btn" title="Sign out" onClick={() => void signOutCurrentUser()}>
+            <LogOut size={15} />
           </button>
         </div>
       </header>
@@ -5348,6 +5383,33 @@ function App() {
           )}
         </main>
       )}
+
+      <nav className="mobile-tabbar" aria-label="Mobile navigation">
+        <button type="button" className={`mobile-tab-btn ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => navigateToTab('overview')}>
+          <Wallet size={16} />
+          <span className="mobile-tab-label">Home</span>
+        </button>
+        <button type="button" className={`mobile-tab-btn ${activeTab === 'routine' ? 'active' : ''}`} onClick={() => navigateToTab('routine')}>
+          <CalendarRange size={16} />
+          <span className="mobile-tab-label">Routine</span>
+        </button>
+        <button type="button" className={`mobile-tab-btn ${activeTab === 'datahub' ? 'active' : ''}`} onClick={() => navigateToTab('datahub')}>
+          <Database size={16} />
+          <span className="mobile-tab-label">Hub</span>
+        </button>
+        <button type="button" className={`mobile-tab-btn ${activeTab === 'income' ? 'active' : ''}`} onClick={() => navigateToTab('income')}>
+          <Coins size={16} />
+          <span className="mobile-tab-label">Income</span>
+        </button>
+        <button type="button" className={`mobile-tab-btn ${activeTab === 'budgeting' ? 'active' : ''}`} onClick={() => navigateToTab('budgeting')}>
+          <PiggyBank size={16} />
+          <span className="mobile-tab-label">Budget</span>
+        </button>
+        <button type="button" className={`mobile-tab-btn ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => navigateToTab('settings')}>
+          <Settings size={16} />
+          <span className="mobile-tab-label">Settings</span>
+        </button>
+      </nav>
     </div>
   )
 }
