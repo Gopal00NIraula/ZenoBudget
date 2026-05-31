@@ -57,6 +57,7 @@ import {
   UserRound,
   Wallet,
 } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   db,
   refreshCurrentUser,
@@ -95,6 +96,45 @@ type PayUploadFrequency = 'biweekly' | 'monthly'
 type IncomeScreen = 'ledger' | 'reconciliation'
 type LedgerGroupBy = 'day' | 'week' | 'biweekly' | 'month' | 'year'
 type LedgerTypeFilter = 'all' | 'commission' | 'manual'
+
+const tabToPath: Record<Tab, string> = {
+  overview: '/overview',
+  routine: '/routine',
+  datahub: '/datahub',
+  income: '/income',
+  budgeting: '/budgeting',
+  settings: '/settings',
+}
+
+function resolveTabFromPath(pathname: string): Tab | null {
+  const normalizedPath = pathname.trim().toLowerCase().replace(/\/+$/, '') || '/'
+
+  if (normalizedPath === '/' || normalizedPath === '/overview') {
+    return 'overview'
+  }
+
+  if (normalizedPath === '/routine' || normalizedPath.startsWith('/routin')) {
+    return 'routine'
+  }
+
+  if (normalizedPath === '/datahub') {
+    return 'datahub'
+  }
+
+  if (normalizedPath === '/income') {
+    return 'income'
+  }
+
+  if (normalizedPath === '/budgeting') {
+    return 'budgeting'
+  }
+
+  if (normalizedPath === '/settings') {
+    return 'settings'
+  }
+
+  return null
+}
 
 type HubDayMode = 'working' | 'off'
 
@@ -567,6 +607,8 @@ function useUserProfile(uid: string | null) {
 }
 
 function App() {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [user, setUser] = useState<FirebaseUser | null>(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [authMode, setAuthMode] = useState<AuthMode>('login')
@@ -586,7 +628,7 @@ function App() {
   const [settingsError, setSettingsError] = useState(false)
   const [isEditingSettings, setIsEditingSettings] = useState(false)
 
-  const [activeTab, setActiveTab] = useState<Tab>('overview')
+  const [activeTab, setActiveTab] = useState<Tab>(() => resolveTabFromPath(window.location.pathname) ?? 'overview')
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [selectedRoutineDate, setSelectedRoutineDate] = useState(todayIso)
 
@@ -669,6 +711,42 @@ function App() {
 
     return () => unsubscribe()
   }, [])
+
+  useEffect(() => {
+    const routeTab = resolveTabFromPath(location.pathname)
+
+    if (routeTab) {
+      setActiveTab((previous) => (previous === routeTab ? previous : routeTab))
+      return
+    }
+
+    navigate(tabToPath.overview, { replace: true })
+  }, [location.pathname, navigate])
+
+  useEffect(() => {
+    if (!isFirebaseConfigured || authLoading) {
+      return
+    }
+
+    const isAuthRoute = location.pathname === '/login'
+
+    if (!user && !isAuthRoute) {
+      navigate('/login', { replace: true })
+      return
+    }
+
+    if (user && isAuthRoute) {
+      navigate(tabToPath.overview, { replace: true })
+    }
+  }, [authLoading, location.pathname, navigate, user])
+
+  const navigateToTab = useCallback(
+    (tab: Tab) => {
+      setActiveTab(tab)
+      navigate(tabToPath[tab])
+    },
+    [navigate],
+  )
 
   const uid = user?.uid ?? null
 
@@ -1977,27 +2055,27 @@ function App() {
           <span>ZenoBudget</span>
         </div>
         <nav className="navbar-nav" aria-label="Dashboard sections">
-          <button type="button" className={activeTab === 'overview' ? 'active' : ''} onClick={() => setActiveTab('overview')}>
+          <button type="button" className={activeTab === 'overview' ? 'active' : ''} onClick={() => navigateToTab('overview')}>
             <Wallet size={15} />
             Overview
           </button>
-          <button type="button" className={activeTab === 'routine' ? 'active' : ''} onClick={() => setActiveTab('routine')}>
+          <button type="button" className={activeTab === 'routine' ? 'active' : ''} onClick={() => navigateToTab('routine')}>
             <CalendarRange size={15} />
             Routine
           </button>
-          <button type="button" className={activeTab === 'datahub' ? 'active' : ''} onClick={() => setActiveTab('datahub')}>
+          <button type="button" className={activeTab === 'datahub' ? 'active' : ''} onClick={() => navigateToTab('datahub')}>
             <Database size={15} />
             Data Hub
           </button>
-          <button type="button" className={activeTab === 'income' ? 'active' : ''} onClick={() => setActiveTab('income')}>
+          <button type="button" className={activeTab === 'income' ? 'active' : ''} onClick={() => navigateToTab('income')}>
             <Coins size={15} />
             Income Ledger
           </button>
-          <button type="button" className={activeTab === 'budgeting' ? 'active' : ''} onClick={() => setActiveTab('budgeting')}>
+          <button type="button" className={activeTab === 'budgeting' ? 'active' : ''} onClick={() => navigateToTab('budgeting')}>
             <PiggyBank size={15} />
             Budgeting
           </button>
-          <button type="button" className={activeTab === 'settings' ? 'active' : ''} onClick={() => setActiveTab('settings')}>
+          <button type="button" className={activeTab === 'settings' ? 'active' : ''} onClick={() => navigateToTab('settings')}>
             <Settings size={15} />
             Settings
           </button>
@@ -3118,7 +3196,7 @@ function App() {
                     className="primary-btn"
                     onClick={() => {
                       if (budgetsStore.data.length === 0) {
-                        setActiveTab('budgeting')
+                        navigateToTab('budgeting')
                         setShowBudgetForm(true)
                         return
                       }
